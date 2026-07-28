@@ -1,0 +1,19 @@
+Project: Bulk File Rename  (BOG.BulkFileRename)
+Class: Small Utility
+Author: John J Schultz   ( http://www.bitsofgenius.com )
+
+Allows all or selected files within a folder to be renamed using one
+of a variety of methods: root name prefix, root name suffix, extension
+prefix, extension suffix, insert at a specific position, replace text
+and remove text.
+
+The app is launched directly, or via a command-line with the starting
+folder as the sole parameter.
+
+It is intended to work with large sets of files, which need to be
+renamed with more complex rules than a simple name.
+
+v1.0 -- 2011 -- Original project on SourceForge.net
+v1.1 -- 2022 -- Migration to GitHub and framework updates.
+- Upgrade to .NET Framework 4.8 for maintainability in the modern world.
+- Replace Registry addition for Windows Explorer context menu to startup (install package no longer supported).
