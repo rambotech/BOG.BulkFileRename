@@ -495,37 +495,6 @@ namespace BOG.BulkFileRename
 		}
 		#endregion
 
-		#region Registry Templates
-
-		private string GetRegistryTemplateForSet()
-		{
-			return
-		@"Windows Registry Editor Version 5.00
-
-[HKEY_CLASSES_ROOT\Directory\shell\BOG.BulkFileRename]
-@=""Bulk File Rename""
-
-[HKEY_CLASSES_ROOT\Directory\shell\BOG.BulkFileRename\command]
-@=""\""[{[PATH]}]\\BOG.BulkFileRename.exe\"" \""%1\""""
-
-[-HKEY_CLASSES_ROOT\Directory\shell\Bulk_File_Rename]
-
-";
-		}
-
-		private string GetRegistryTemplateForRemove()
-		{
-			return
-		@"Windows Registry Editor Version 5.00
-
-[-HKEY_CLASSES_ROOT\Directory\shell\BOG.BulkFileRename]
-
-[-HKEY_CLASSES_ROOT\Directory\shell\Bulk_File_Rename]
-";
-		}
-
-
-		#endregion
 
 		#region Windows Form Designer generated code
 

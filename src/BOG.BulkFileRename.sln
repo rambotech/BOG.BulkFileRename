@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.8.12021.73 stable
+VisualStudioVersion = 18.8.12021.73
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOG.BulkFileRename", "BOG.BulkFileRename\BOG.BulkFileRename.csproj", "{37014AA5-C457-423E-A8B6-7676B3FE6C4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOG.BulkFileRename.WinformApp", "BOG.BulkFileRename\BOG.BulkFileRename.WinformApp.csproj", "{37014AA5-C457-423E-A8B6-7676B3FE6C4C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_DOC", "_DOC", "{DA5AEEDD-5F6C-40AE-ADEA-559C214C1E2F}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_DOC", "_DOC", "{DA5AEEDD-5
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOG.BulkFileRename.Common", "BOG.BulkFileRenameCommon\BOG.BulkFileRename.Common.csproj", "{363C6616-37F9-4CED-9054-7A413B57D1C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 		{37014AA5-C457-423E-A8B6-7676B3FE6C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37014AA5-C457-423E-A8B6-7676B3FE6C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37014AA5-C457-423E-A8B6-7676B3FE6C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363C6616-37F9-4CED-9054-7A413B57D1C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363C6616-37F9-4CED-9054-7A413B57D1C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363C6616-37F9-4CED-9054-7A413B57D1C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363C6616-37F9-4CED-9054-7A413B57D1C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
