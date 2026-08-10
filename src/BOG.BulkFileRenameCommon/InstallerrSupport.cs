@@ -3,7 +3,7 @@ namespace BOG.BulkFileRename.Common
 	public static class InstallerSupport
 	{
 		#region Registry Templates
-		private static string GetRegistryTemplateForInstall()
+		public static string GetRegistryTemplateForInstall()
 		{
 			return
 		@"Windows Registry Editor Version 5.00
@@ -19,7 +19,7 @@ namespace BOG.BulkFileRename.Common
 ";
 		}
 
-		private static string GetRegistryTemplateForRemoval()
+		public static string GetRegistryTemplateForRemoval()
 		{
 			return
 		@"Windows Registry Editor Version 5.00

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/_DOC/">
+    <File Path="../.gitattributes" />
+    <File Path="../.gitignore" />
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path="BOG.BulkFileRename/docs/BulkFileRename.pdf" />
+  </Folder>
+  <Project Path="BOG.BulkFileRename/BOG.BulkFileRename.WinformApp.csproj" />
+  <Project Path="BOG.BulkFileRenameCommon/BOG.BulkFileRename.Common.csproj" />
+</Solution>

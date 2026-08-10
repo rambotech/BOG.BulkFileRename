@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using BOG.SwissArmyKnife;
 using BOG.SwissArmyKnife.Extensions;
+using BOG.BulkFileRename.Common;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace BOG.BulkFileRename
@@ -35,6 +36,31 @@ namespace BOG.BulkFileRename
 		private SettingsDictionary AppSettings = new SettingsDictionary();
 		private ToolStripMenuItem createWindowsExplorerShellExtensionToolStripMenuItem;
 		private ToolStripMenuItem removeWindowsExplorerShellExtensionToolStripMenuItem;
+		private SplitContainer splitContainer2;
+		private ListBox lbxFileManifest;
+		private GroupBox gbxMethods;
+		private RadioButton rbReplaceTextRegex;
+		private CheckBox chkIgnoreCaseDuringFind;
+		private System.Windows.Forms.TextBox txtWildcardMask;
+		private Label lblWildcardMask;
+		private System.Windows.Forms.TextBox txtReplace;
+		private Label lblReplace;
+		private System.Windows.Forms.TextBox txtFind;
+		private Label lblFind;
+		private System.Windows.Forms.TextBox txtInsertAt;
+		private RadioButton rbInsertAt;
+		private RadioButton rbSuffixExtension;
+		private RadioButton rbPrefixExtension;
+		private RadioButton rbSuffixRoot;
+		private RadioButton rbPrefixRoot;
+		private RadioButton rbReplaceText;
+		private RadioButton rbRemoveText;
+		private GroupBox gbxTargetNames;
+		private RadioButton rbBecomeUpper;
+		private RadioButton rbBecomeLower;
+		private RadioButton rbRetainCase;
+		private ToolStripMenuItem resetToDefaultToolStripMenuItem;
+		private ToolStripSeparator toolStripMenuItem3;
 		bool LaunchedWithParameter = false;
 
 		public MainForm(string[] args)
@@ -277,13 +303,16 @@ namespace BOG.BulkFileRename
 
 		private void Adjust_Controls()
 		{
-			this.lblReplace.Visible = this.rbReplaceText.Checked;
-			this.lblFind.Text = this.rbReplaceText.Checked || this.rbRemoveText.Checked ? "Find" : "String";
+			this.lblReplace.Visible = this.rbReplaceText.Checked || this.rbReplaceTextRegex.Checked;
+			this.lblFind.Text =
+				this.rbReplaceText.Checked || this.rbReplaceTextRegex.Checked || this.rbRemoveText.Checked 
+				? "Find" 
+				: "String";
 			this.lblWildcardMask.Visible = this.rbReplaceText.Checked;
-			this.txtReplace.Visible = this.rbReplaceText.Checked;
-			this.txtWildcardMask.Visible = this.rbReplaceText.Checked;
+			this.txtReplace.Visible = this.rbReplaceText.Checked || this.rbReplaceTextRegex.Checked;
 			this.txtInsertAt.Visible = this.rbInsertAt.Checked;
-			this.chkIgnoreCaseDuringFind.Visible = this.rbReplaceText.Checked || this.rbRemoveText.Checked;
+			this.chkIgnoreCaseDuringFind.Visible =
+				this.rbReplaceText.Checked || this.rbReplaceTextRegex.Checked || this.rbRemoveText.Checked;
 		}
 
 		#region Form event handlders
@@ -315,6 +344,11 @@ namespace BOG.BulkFileRename
 		}
 
 		private void rbReplaceText_CheckedChanged(object sender, EventArgs e)
+		{
+			Adjust_Controls();
+		}
+
+		private void rbReplaceTextRegex_CheckedChanged(object sender, EventArgs e)
 		{
 			Adjust_Controls();
 		}
@@ -448,7 +482,7 @@ namespace BOG.BulkFileRename
 				MessageBox.Show("Not added", "Action Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
-			ApplyRegImportFromTemplate(GetRegistryTemplateForSet(), "BOG.BulkFileRename_Set.reg");
+			ApplyRegImportFromTemplate(InstallerSupport.GetRegistryTemplateForInstall(), "BOG.BulkFileRename_Set.reg");
 		}
 
 		private void removeWindowsExplorerShellExtensionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -464,7 +498,7 @@ namespace BOG.BulkFileRename
 				MessageBox.Show("Not removed", "Action Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
-			ApplyRegImportFromTemplate(GetRegistryTemplateForRemove(), "BOG.BulkFileRename_Remove.reg");
+			ApplyRegImportFromTemplate(InstallerSupport.GetRegistryTemplateForRemoval(), "BOG.BulkFileRename_Remove.reg");
 		}
 
 		private void ApplyRegImportFromTemplate(string templateText, string regFileName)
@@ -517,11 +551,9 @@ namespace BOG.BulkFileRename
 			helpToolStripMenuItem = new ToolStripMenuItem();
 			aboutToolStripMenuItem1 = new ToolStripMenuItem();
 			splitContainer1 = new SplitContainer();
+			splitContainer2 = new SplitContainer();
 			gbxMethods = new GroupBox();
-			gbxTargetNames = new GroupBox();
-			rbBecomeUpper = new RadioButton();
-			rbBecomeLower = new RadioButton();
-			rbRetainCase = new RadioButton();
+			rbReplaceTextRegex = new RadioButton();
 			chkIgnoreCaseDuringFind = new CheckBox();
 			txtWildcardMask = new System.Windows.Forms.TextBox();
 			lblWildcardMask = new Label();
@@ -537,6 +569,10 @@ namespace BOG.BulkFileRename
 			rbPrefixRoot = new RadioButton();
 			rbReplaceText = new RadioButton();
 			rbRemoveText = new RadioButton();
+			gbxTargetNames = new GroupBox();
+			rbBecomeUpper = new RadioButton();
+			rbBecomeLower = new RadioButton();
+			rbRetainCase = new RadioButton();
 			gbxFiles = new GroupBox();
 			btnSelectFolder = new System.Windows.Forms.Button();
 			txtFolder = new System.Windows.Forms.TextBox();
@@ -545,11 +581,17 @@ namespace BOG.BulkFileRename
 			btnDeselectAll = new System.Windows.Forms.Button();
 			btnSelectAll = new System.Windows.Forms.Button();
 			lbxFileManifest = new ListBox();
+			resetToDefaultToolStripMenuItem = new ToolStripMenuItem();
+			toolStripMenuItem3 = new ToolStripSeparator();
 			menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
 			splitContainer1.Panel1.SuspendLayout();
 			splitContainer1.Panel2.SuspendLayout();
 			splitContainer1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+			splitContainer2.Panel1.SuspendLayout();
+			splitContainer2.Panel2.SuspendLayout();
+			splitContainer2.SuspendLayout();
 			gbxMethods.SuspendLayout();
 			gbxTargetNames.SuspendLayout();
 			gbxFiles.SuspendLayout();
@@ -561,13 +603,13 @@ namespace BOG.BulkFileRename
 			menuStrip1.Location = new Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Padding = new Padding(7, 2, 0, 2);
-			menuStrip1.Size = new Size(674, 24);
+			menuStrip1.Size = new Size(1016, 24);
 			menuStrip1.TabIndex = 0;
 			menuStrip1.Text = "menuStrip1";
 			// 
 			// mainToolStripMenuItem
 			// 
-			mainToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectFolderToolStripMenuItem, toolStripMenuItem1, exitToolStripMenuItem });
+			mainToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectFolderToolStripMenuItem, toolStripMenuItem1, resetToDefaultToolStripMenuItem, toolStripMenuItem3, exitToolStripMenuItem });
 			mainToolStripMenuItem.Name = "mainToolStripMenuItem";
 			mainToolStripMenuItem.Size = new Size(46, 20);
 			mainToolStripMenuItem.Text = "&Main";
@@ -575,19 +617,19 @@ namespace BOG.BulkFileRename
 			// selectFolderToolStripMenuItem
 			// 
 			selectFolderToolStripMenuItem.Name = "selectFolderToolStripMenuItem";
-			selectFolderToolStripMenuItem.Size = new Size(141, 22);
+			selectFolderToolStripMenuItem.Size = new Size(158, 22);
 			selectFolderToolStripMenuItem.Text = "&Select Folder";
 			selectFolderToolStripMenuItem.Click += selectFolderToolStripMenuItem_Click;
 			// 
 			// toolStripMenuItem1
 			// 
 			toolStripMenuItem1.Name = "toolStripMenuItem1";
-			toolStripMenuItem1.Size = new Size(138, 6);
+			toolStripMenuItem1.Size = new Size(155, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			exitToolStripMenuItem.Size = new Size(141, 22);
+			exitToolStripMenuItem.Size = new Size(158, 22);
 			exitToolStripMenuItem.Text = "E&xit";
 			exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
 			// 
@@ -640,20 +682,37 @@ namespace BOG.BulkFileRename
 			// 
 			// splitContainer1.Panel1
 			// 
-			splitContainer1.Panel1.Controls.Add(gbxMethods);
+			splitContainer1.Panel1.Controls.Add(splitContainer2);
 			// 
 			// splitContainer1.Panel2
 			// 
 			splitContainer1.Panel2.Controls.Add(gbxFiles);
-			splitContainer1.Size = new Size(674, 445);
-			splitContainer1.SplitterDistance = 223;
+			splitContainer1.Size = new Size(1016, 634);
+			splitContainer1.SplitterDistance = 465;
 			splitContainer1.SplitterWidth = 5;
 			splitContainer1.TabIndex = 1;
 			// 
+			// splitContainer2
+			// 
+			splitContainer2.Dock = DockStyle.Fill;
+			splitContainer2.Location = new Point(0, 0);
+			splitContainer2.Name = "splitContainer2";
+			splitContainer2.Orientation = Orientation.Horizontal;
+			// 
+			// splitContainer2.Panel1
+			// 
+			splitContainer2.Panel1.Controls.Add(gbxMethods);
+			// 
+			// splitContainer2.Panel2
+			// 
+			splitContainer2.Panel2.Controls.Add(gbxTargetNames);
+			splitContainer2.Size = new Size(465, 634);
+			splitContainer2.SplitterDistance = 525;
+			splitContainer2.TabIndex = 17;
+			// 
 			// gbxMethods
 			// 
-			gbxMethods.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			gbxMethods.Controls.Add(gbxTargetNames);
+			gbxMethods.Controls.Add(rbReplaceTextRegex);
 			gbxMethods.Controls.Add(chkIgnoreCaseDuringFind);
 			gbxMethods.Controls.Add(txtWildcardMask);
 			gbxMethods.Controls.Add(lblWildcardMask);
@@ -669,70 +728,33 @@ namespace BOG.BulkFileRename
 			gbxMethods.Controls.Add(rbPrefixRoot);
 			gbxMethods.Controls.Add(rbReplaceText);
 			gbxMethods.Controls.Add(rbRemoveText);
-			gbxMethods.Location = new Point(5, 5);
+			gbxMethods.Dock = DockStyle.Fill;
+			gbxMethods.Location = new Point(0, 0);
 			gbxMethods.Margin = new Padding(4, 3, 4, 3);
 			gbxMethods.MinimumSize = new Size(216, 437);
 			gbxMethods.Name = "gbxMethods";
 			gbxMethods.Padding = new Padding(4, 3, 4, 3);
-			gbxMethods.Size = new Size(216, 437);
-			gbxMethods.TabIndex = 0;
+			gbxMethods.Size = new Size(465, 525);
+			gbxMethods.TabIndex = 1;
 			gbxMethods.TabStop = false;
 			gbxMethods.Text = "Method";
 			// 
-			// gbxTargetNames
+			// rbReplaceTextRegex
 			// 
-			gbxTargetNames.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			gbxTargetNames.Controls.Add(rbBecomeUpper);
-			gbxTargetNames.Controls.Add(rbBecomeLower);
-			gbxTargetNames.Controls.Add(rbRetainCase);
-			gbxTargetNames.Location = new Point(7, 324);
-			gbxTargetNames.Margin = new Padding(4, 3, 4, 3);
-			gbxTargetNames.Name = "gbxTargetNames";
-			gbxTargetNames.Padding = new Padding(4, 3, 4, 3);
-			gbxTargetNames.Size = new Size(202, 106);
-			gbxTargetNames.TabIndex = 15;
-			gbxTargetNames.TabStop = false;
-			gbxTargetNames.Text = "Target Names will ...";
-			// 
-			// rbBecomeUpper
-			// 
-			rbBecomeUpper.AutoSize = true;
-			rbBecomeUpper.Location = new Point(8, 76);
-			rbBecomeUpper.Margin = new Padding(4, 3, 4, 3);
-			rbBecomeUpper.Name = "rbBecomeUpper";
-			rbBecomeUpper.Size = new Size(103, 19);
-			rbBecomeUpper.TabIndex = 2;
-			rbBecomeUpper.Text = "Become Upper";
-			rbBecomeUpper.UseVisualStyleBackColor = true;
-			// 
-			// rbBecomeLower
-			// 
-			rbBecomeLower.AutoSize = true;
-			rbBecomeLower.Location = new Point(7, 50);
-			rbBecomeLower.Margin = new Padding(4, 3, 4, 3);
-			rbBecomeLower.Name = "rbBecomeLower";
-			rbBecomeLower.Size = new Size(103, 19);
-			rbBecomeLower.TabIndex = 1;
-			rbBecomeLower.Text = "Become Lower";
-			rbBecomeLower.UseVisualStyleBackColor = true;
-			// 
-			// rbRetainCase
-			// 
-			rbRetainCase.AutoSize = true;
-			rbRetainCase.Checked = true;
-			rbRetainCase.Location = new Point(8, 23);
-			rbRetainCase.Margin = new Padding(4, 3, 4, 3);
-			rbRetainCase.Name = "rbRetainCase";
-			rbRetainCase.Size = new Size(86, 19);
-			rbRetainCase.TabIndex = 0;
-			rbRetainCase.TabStop = true;
-			rbRetainCase.Text = "Retain Case";
-			rbRetainCase.UseVisualStyleBackColor = true;
+			rbReplaceTextRegex.AutoSize = true;
+			rbReplaceTextRegex.Location = new Point(9, 75);
+			rbReplaceTextRegex.Margin = new Padding(4, 3, 4, 3);
+			rbReplaceTextRegex.Name = "rbReplaceTextRegex";
+			rbReplaceTextRegex.Size = new Size(135, 19);
+			rbReplaceTextRegex.TabIndex = 16;
+			rbReplaceTextRegex.Text = "Replace Text (REGEX)";
+			rbReplaceTextRegex.UseVisualStyleBackColor = true;
+			rbReplaceTextRegex.CheckedChanged += rbReplaceTextRegex_CheckedChanged;
 			// 
 			// chkIgnoreCaseDuringFind
 			// 
 			chkIgnoreCaseDuringFind.AutoSize = true;
-			chkIgnoreCaseDuringFind.Location = new Point(35, 298);
+			chkIgnoreCaseDuringFind.Location = new Point(31, 322);
 			chkIgnoreCaseDuringFind.Margin = new Padding(4, 3, 4, 3);
 			chkIgnoreCaseDuringFind.Name = "chkIgnoreCaseDuringFind";
 			chkIgnoreCaseDuringFind.Size = new Size(148, 19);
@@ -743,17 +765,17 @@ namespace BOG.BulkFileRename
 			// txtWildcardMask
 			// 
 			txtWildcardMask.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			txtWildcardMask.Location = new Point(112, 268);
+			txtWildcardMask.Location = new Point(117, 293);
 			txtWildcardMask.Margin = new Padding(4, 3, 4, 3);
 			txtWildcardMask.Name = "txtWildcardMask";
-			txtWildcardMask.Size = new Size(96, 23);
+			txtWildcardMask.Size = new Size(340, 23);
 			txtWildcardMask.TabIndex = 13;
 			txtWildcardMask.Visible = false;
 			// 
 			// lblWildcardMask
 			// 
 			lblWildcardMask.AutoSize = true;
-			lblWildcardMask.Location = new Point(12, 271);
+			lblWildcardMask.Location = new Point(13, 296);
 			lblWildcardMask.Margin = new Padding(4, 0, 4, 0);
 			lblWildcardMask.Name = "lblWildcardMask";
 			lblWildcardMask.Size = new Size(95, 15);
@@ -764,17 +786,17 @@ namespace BOG.BulkFileRename
 			// txtReplace
 			// 
 			txtReplace.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			txtReplace.Location = new Point(112, 239);
+			txtReplace.Location = new Point(117, 264);
 			txtReplace.Margin = new Padding(4, 3, 4, 3);
 			txtReplace.Name = "txtReplace";
-			txtReplace.Size = new Size(96, 23);
+			txtReplace.Size = new Size(340, 23);
 			txtReplace.TabIndex = 11;
 			txtReplace.Visible = false;
 			// 
 			// lblReplace
 			// 
 			lblReplace.AutoSize = true;
-			lblReplace.Location = new Point(12, 242);
+			lblReplace.Location = new Point(13, 267);
 			lblReplace.Margin = new Padding(4, 0, 4, 0);
 			lblReplace.Name = "lblReplace";
 			lblReplace.Size = new Size(48, 15);
@@ -785,25 +807,25 @@ namespace BOG.BulkFileRename
 			// txtFind
 			// 
 			txtFind.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			txtFind.Location = new Point(112, 210);
+			txtFind.Location = new Point(117, 235);
 			txtFind.Margin = new Padding(4, 3, 4, 3);
 			txtFind.Name = "txtFind";
-			txtFind.Size = new Size(96, 23);
+			txtFind.Size = new Size(340, 23);
 			txtFind.TabIndex = 9;
 			// 
 			// lblFind
 			// 
 			lblFind.AutoSize = true;
-			lblFind.Location = new Point(12, 213);
+			lblFind.Location = new Point(13, 238);
 			lblFind.Margin = new Padding(4, 0, 4, 0);
 			lblFind.Name = "lblFind";
-			lblFind.Size = new Size(38, 15);
+			lblFind.Size = new Size(30, 15);
 			lblFind.TabIndex = 8;
-			lblFind.Text = "String";
+			lblFind.Text = "Find";
 			// 
 			// txtInsertAt
 			// 
-			txtInsertAt.Location = new Point(96, 182);
+			txtInsertAt.Location = new Point(96, 207);
 			txtInsertAt.Margin = new Padding(4, 3, 4, 3);
 			txtInsertAt.Name = "txtInsertAt";
 			txtInsertAt.Size = new Size(59, 23);
@@ -813,31 +835,30 @@ namespace BOG.BulkFileRename
 			// rbInsertAt
 			// 
 			rbInsertAt.AutoSize = true;
-			rbInsertAt.Location = new Point(10, 182);
+			rbInsertAt.Location = new Point(9, 207);
 			rbInsertAt.Margin = new Padding(4, 3, 4, 3);
 			rbInsertAt.Name = "rbInsertAt";
 			rbInsertAt.Size = new Size(72, 19);
 			rbInsertAt.TabIndex = 6;
 			rbInsertAt.Text = "Insert At:";
 			rbInsertAt.UseVisualStyleBackColor = true;
-			rbInsertAt.CheckedChanged += rbInsertAt_CheckedChanged;
 			// 
 			// rbSuffixExtension
 			// 
 			rbSuffixExtension.AutoSize = true;
-			rbSuffixExtension.Location = new Point(10, 156);
+			rbSuffixExtension.Location = new Point(9, 181);
 			rbSuffixExtension.Margin = new Padding(4, 3, 4, 3);
 			rbSuffixExtension.Name = "rbSuffixExtension";
 			rbSuffixExtension.Size = new Size(109, 19);
 			rbSuffixExtension.TabIndex = 5;
 			rbSuffixExtension.Text = "Suffix Extension";
 			rbSuffixExtension.UseVisualStyleBackColor = true;
-			rbSuffixExtension.CheckedChanged += rbSuffixExtension_CheckedChanged;
+			rbSuffixExtension.CheckedChanged += rbSuffixRoot_CheckedChanged;
 			// 
 			// rbPrefixExtension
 			// 
 			rbPrefixExtension.AutoSize = true;
-			rbPrefixExtension.Location = new Point(10, 129);
+			rbPrefixExtension.Location = new Point(9, 154);
 			rbPrefixExtension.Margin = new Padding(4, 3, 4, 3);
 			rbPrefixExtension.Name = "rbPrefixExtension";
 			rbPrefixExtension.Size = new Size(109, 19);
@@ -849,7 +870,7 @@ namespace BOG.BulkFileRename
 			// rbSuffixRoot
 			// 
 			rbSuffixRoot.AutoSize = true;
-			rbSuffixRoot.Location = new Point(10, 103);
+			rbSuffixRoot.Location = new Point(9, 128);
 			rbSuffixRoot.Margin = new Padding(4, 3, 4, 3);
 			rbSuffixRoot.Name = "rbSuffixRoot";
 			rbSuffixRoot.Size = new Size(83, 19);
@@ -861,7 +882,7 @@ namespace BOG.BulkFileRename
 			// rbPrefixRoot
 			// 
 			rbPrefixRoot.AutoSize = true;
-			rbPrefixRoot.Location = new Point(10, 76);
+			rbPrefixRoot.Location = new Point(9, 101);
 			rbPrefixRoot.Margin = new Padding(4, 3, 4, 3);
 			rbPrefixRoot.Name = "rbPrefixRoot";
 			rbPrefixRoot.Size = new Size(83, 19);
@@ -873,7 +894,7 @@ namespace BOG.BulkFileRename
 			// rbReplaceText
 			// 
 			rbReplaceText.AutoSize = true;
-			rbReplaceText.Location = new Point(10, 50);
+			rbReplaceText.Location = new Point(9, 50);
 			rbReplaceText.Margin = new Padding(4, 3, 4, 3);
 			rbReplaceText.Name = "rbReplaceText";
 			rbReplaceText.Size = new Size(90, 19);
@@ -886,7 +907,7 @@ namespace BOG.BulkFileRename
 			// 
 			rbRemoveText.AutoSize = true;
 			rbRemoveText.Checked = true;
-			rbRemoveText.Location = new Point(10, 23);
+			rbRemoveText.Location = new Point(9, 23);
 			rbRemoveText.Margin = new Padding(4, 3, 4, 3);
 			rbRemoveText.Name = "rbRemoveText";
 			rbRemoveText.Size = new Size(92, 19);
@@ -895,6 +916,56 @@ namespace BOG.BulkFileRename
 			rbRemoveText.Text = "Remove Text";
 			rbRemoveText.UseVisualStyleBackColor = true;
 			rbRemoveText.CheckedChanged += rbRemoveText_CheckedChanged;
+			// 
+			// gbxTargetNames
+			// 
+			gbxTargetNames.Controls.Add(rbBecomeUpper);
+			gbxTargetNames.Controls.Add(rbBecomeLower);
+			gbxTargetNames.Controls.Add(rbRetainCase);
+			gbxTargetNames.Dock = DockStyle.Fill;
+			gbxTargetNames.Location = new Point(0, 0);
+			gbxTargetNames.Margin = new Padding(4, 3, 4, 3);
+			gbxTargetNames.Name = "gbxTargetNames";
+			gbxTargetNames.Padding = new Padding(4, 3, 4, 3);
+			gbxTargetNames.Size = new Size(465, 105);
+			gbxTargetNames.TabIndex = 17;
+			gbxTargetNames.TabStop = false;
+			gbxTargetNames.Text = "Target Names will ...";
+			// 
+			// rbBecomeUpper
+			// 
+			rbBecomeUpper.AutoSize = true;
+			rbBecomeUpper.Location = new Point(10, 76);
+			rbBecomeUpper.Margin = new Padding(4, 3, 4, 3);
+			rbBecomeUpper.Name = "rbBecomeUpper";
+			rbBecomeUpper.Size = new Size(103, 19);
+			rbBecomeUpper.TabIndex = 2;
+			rbBecomeUpper.Text = "Become Upper";
+			rbBecomeUpper.UseVisualStyleBackColor = true;
+			// 
+			// rbBecomeLower
+			// 
+			rbBecomeLower.AutoSize = true;
+			rbBecomeLower.Location = new Point(9, 50);
+			rbBecomeLower.Margin = new Padding(4, 3, 4, 3);
+			rbBecomeLower.Name = "rbBecomeLower";
+			rbBecomeLower.Size = new Size(103, 19);
+			rbBecomeLower.TabIndex = 1;
+			rbBecomeLower.Text = "Become Lower";
+			rbBecomeLower.UseVisualStyleBackColor = true;
+			// 
+			// rbRetainCase
+			// 
+			rbRetainCase.AutoSize = true;
+			rbRetainCase.Checked = true;
+			rbRetainCase.Location = new Point(10, 23);
+			rbRetainCase.Margin = new Padding(4, 3, 4, 3);
+			rbRetainCase.Name = "rbRetainCase";
+			rbRetainCase.Size = new Size(86, 19);
+			rbRetainCase.TabIndex = 0;
+			rbRetainCase.TabStop = true;
+			rbRetainCase.Text = "Retain Case";
+			rbRetainCase.UseVisualStyleBackColor = true;
 			// 
 			// gbxFiles
 			// 
@@ -910,7 +981,7 @@ namespace BOG.BulkFileRename
 			gbxFiles.Margin = new Padding(4, 3, 4, 3);
 			gbxFiles.Name = "gbxFiles";
 			gbxFiles.Padding = new Padding(4, 3, 4, 3);
-			gbxFiles.Size = new Size(438, 437);
+			gbxFiles.Size = new Size(535, 626);
 			gbxFiles.TabIndex = 0;
 			gbxFiles.TabStop = false;
 			gbxFiles.Text = "Folder Content";
@@ -920,7 +991,7 @@ namespace BOG.BulkFileRename
 			btnSelectFolder.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			btnSelectFolder.AutoSize = true;
 			btnSelectFolder.Image = (Image)resources.GetObject("btnSelectFolder.Image");
-			btnSelectFolder.Location = new Point(382, 31);
+			btnSelectFolder.Location = new Point(479, 31);
 			btnSelectFolder.Margin = new Padding(4, 3, 4, 3);
 			btnSelectFolder.Name = "btnSelectFolder";
 			btnSelectFolder.Size = new Size(45, 38);
@@ -938,14 +1009,14 @@ namespace BOG.BulkFileRename
 			txtFolder.Multiline = true;
 			txtFolder.Name = "txtFolder";
 			txtFolder.ScrollBars = ScrollBars.Vertical;
-			txtFolder.Size = new Size(367, 47);
+			txtFolder.Size = new Size(464, 47);
 			txtFolder.TabIndex = 6;
 			txtFolder.Text = "Select a folder";
 			// 
 			// btnTryIt
 			// 
 			btnTryIt.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			btnTryIt.Location = new Point(327, 395);
+			btnTryIt.Location = new Point(424, 584);
 			btnTryIt.Margin = new Padding(4, 3, 4, 3);
 			btnTryIt.Name = "btnTryIt";
 			btnTryIt.Size = new Size(100, 36);
@@ -957,7 +1028,7 @@ namespace BOG.BulkFileRename
 			// btnInvertAll
 			// 
 			btnInvertAll.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			btnInvertAll.Location = new Point(215, 400);
+			btnInvertAll.Location = new Point(312, 589);
 			btnInvertAll.Margin = new Padding(4, 3, 4, 3);
 			btnInvertAll.Name = "btnInvertAll";
 			btnInvertAll.Size = new Size(88, 27);
@@ -969,7 +1040,7 @@ namespace BOG.BulkFileRename
 			// btnDeselectAll
 			// 
 			btnDeselectAll.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			btnDeselectAll.Location = new Point(120, 400);
+			btnDeselectAll.Location = new Point(217, 589);
 			btnDeselectAll.Margin = new Padding(4, 3, 4, 3);
 			btnDeselectAll.Name = "btnDeselectAll";
 			btnDeselectAll.Size = new Size(88, 27);
@@ -981,7 +1052,7 @@ namespace BOG.BulkFileRename
 			// btnSelectAll
 			// 
 			btnSelectAll.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			btnSelectAll.Location = new Point(26, 400);
+			btnSelectAll.Location = new Point(123, 589);
 			btnSelectAll.Margin = new Padding(4, 3, 4, 3);
 			btnSelectAll.Name = "btnSelectAll";
 			btnSelectAll.Size = new Size(88, 27);
@@ -998,16 +1069,27 @@ namespace BOG.BulkFileRename
 			lbxFileManifest.Margin = new Padding(4, 3, 4, 3);
 			lbxFileManifest.Name = "lbxFileManifest";
 			lbxFileManifest.SelectionMode = SelectionMode.MultiExtended;
-			lbxFileManifest.Size = new Size(422, 304);
+			lbxFileManifest.Size = new Size(519, 469);
 			lbxFileManifest.TabIndex = 1;
 			lbxFileManifest.Visible = false;
 			lbxFileManifest.DoubleClick += lbxFileManifest_DoubleClick;
+			// 
+			// resetToDefaultToolStripMenuItem
+			// 
+			resetToDefaultToolStripMenuItem.Name = "resetToDefaultToolStripMenuItem";
+			resetToDefaultToolStripMenuItem.Size = new Size(158, 22);
+			resetToDefaultToolStripMenuItem.Text = "&Reset To Default";
+			// 
+			// toolStripMenuItem3
+			// 
+			toolStripMenuItem3.Name = "toolStripMenuItem3";
+			toolStripMenuItem3.Size = new Size(155, 6);
 			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(674, 475);
+			ClientSize = new Size(1016, 664);
 			Controls.Add(splitContainer1);
 			Controls.Add(menuStrip1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
@@ -1024,6 +1106,10 @@ namespace BOG.BulkFileRename
 			splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
 			splitContainer1.ResumeLayout(false);
+			splitContainer2.Panel1.ResumeLayout(false);
+			splitContainer2.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+			splitContainer2.ResumeLayout(false);
 			gbxMethods.ResumeLayout(false);
 			gbxMethods.PerformLayout();
 			gbxTargetNames.ResumeLayout(false);
@@ -1045,28 +1131,7 @@ namespace BOG.BulkFileRename
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
-		private System.Windows.Forms.GroupBox gbxMethods;
 		private System.Windows.Forms.GroupBox gbxFiles;
-		private System.Windows.Forms.RadioButton rbReplaceText;
-		private System.Windows.Forms.RadioButton rbRemoveText;
-		private System.Windows.Forms.RadioButton rbSuffixRoot;
-		private System.Windows.Forms.RadioButton rbPrefixRoot;
-		private System.Windows.Forms.TextBox txtFind;
-		private System.Windows.Forms.Label lblFind;
-		private System.Windows.Forms.TextBox txtInsertAt;
-		private System.Windows.Forms.RadioButton rbInsertAt;
-		private System.Windows.Forms.RadioButton rbSuffixExtension;
-		private System.Windows.Forms.RadioButton rbPrefixExtension;
-		private System.Windows.Forms.GroupBox gbxTargetNames;
-		private System.Windows.Forms.CheckBox chkIgnoreCaseDuringFind;
-		private System.Windows.Forms.TextBox txtWildcardMask;
-		private System.Windows.Forms.Label lblWildcardMask;
-		private System.Windows.Forms.TextBox txtReplace;
-		private System.Windows.Forms.Label lblReplace;
-		private System.Windows.Forms.RadioButton rbBecomeUpper;
-		private System.Windows.Forms.RadioButton rbBecomeLower;
-		private System.Windows.Forms.RadioButton rbRetainCase;
-		private System.Windows.Forms.ListBox lbxFileManifest;
 		private System.Windows.Forms.Button btnDeselectAll;
 		private System.Windows.Forms.Button btnSelectAll;
 		private System.Windows.Forms.Button btnTryIt;
